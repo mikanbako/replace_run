@@ -147,7 +147,7 @@ def parse_command_line_arguments(argv=None):
         required=True,
         help='The statements for replacing script. '
         'The format is "<regular expression>/<replacement>". '
-        'The escape sequence is "\\"')
+        'The escape sequence is "\\" in <regular expression>.')
     parser.add_argument(
         '-o',
         '--output',
@@ -214,8 +214,8 @@ def _create_temporary_script_file(script_source, source_script_path):
             script_file.close()
 
         raise
-
-    os.sync()
+    finally:
+        os.sync()
 
 
 def _execute(script_source, arguments, source_script_path):
