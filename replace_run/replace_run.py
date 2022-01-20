@@ -215,6 +215,8 @@ def _create_temporary_script_file(script_source, source_script_path):
 
         raise
 
+    os.sync()
+
 
 def _execute(script_source, arguments, source_script_path):
     with _create_temporary_script_file(
