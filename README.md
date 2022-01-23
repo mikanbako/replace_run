@@ -38,6 +38,18 @@ The MIT License. See LICENSE.txt.
 
 Using [asdf](https://asdf-vm.com/) is recommended to use tools for this project.
 
+Install clikit after tools are installed (See "[Poetry does not work on Python 3.5.2](https://github.com/python-poetry/poetry/issues/1744)"):
+
+```
+$ python3 -m pip install clikit
+```
+
+Install dependencies:
+
+```
+$ poetry install
+```
+
 Runs unit tests:
 
 ```
