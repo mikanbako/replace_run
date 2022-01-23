@@ -21,6 +21,7 @@
 # IN THE SOFTWARE.
 
 import argparse
+import contextlib
 import os
 import os.path
 import re
@@ -194,6 +195,7 @@ def replace_script(source_text, all_replacements):
     return text
 
 
+@contextlib.contextmanager
 def _create_temporary_script_file(script_source, source_script_path):
     script_directory = os.path.dirname(os.path.abspath(source_script_path))
     script_extension = os.path.splitext(source_script_path)[1]
@@ -202,27 +204,24 @@ def _create_temporary_script_file(script_source, source_script_path):
         script_file = tempfile.NamedTemporaryFile(
             mode='w',
             suffix=script_extension,
-            dir=script_directory)
+            dir=script_directory,
+            delete=False)
         script_file.write(script_source)
-        script_file.flush()
+        script_file.close()
 
         os.chmod(script_file.name, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
 
-        return script_file
-    except Exception:
-        if script_file:
-            script_file.close()
-
-        raise
+        yield script_file.name
     finally:
-        os.sync()
+        if script_file is not None:
+            os.remove(script_file.name)
 
 
 def _execute(script_source, arguments, source_script_path):
     with _create_temporary_script_file(
-            script_source, source_script_path) as script_file:
+            script_source, source_script_path) as script_path:
 
-        result = subprocess.run([script_file.name] + arguments)
+        result = subprocess.run([script_path] + arguments)
 
         return result.returncode
 
