@@ -153,7 +153,7 @@ def parse_command_line_arguments(argv=None):
         '-o',
         '--output',
         action='store_true',
-        help='Oputput the replaced script instead of running it.')
+        help='Output the replaced script instead of running it.')
     parser.add_argument('script', help='The path of a script file.')
 
     script_arguments, running_script_arguments = _split_command_line_arguments(
